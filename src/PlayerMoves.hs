@@ -17,19 +17,30 @@ rotatePlayer dt player              | l && not r = player   {playerMovement =
 
 -- converts degrees to a vector of length 4
 degToVec :: Float -> Point
-degToVec t = (4*(cos rad), -4*(sin rad))
+degToVec t = ((cos rad), -(sin rad))
     where
         rad = t * pi / 180
 
+--limits velocity of ship 
+limitVelocity :: Point -> Point
+limitVelocity vel | len vel > maxSpeed= (maxSpeed/ (len vel)) `scale` vel
+                  | otherwise = vel
+                  where
+                    maxSpeed = 250
+
 -- moves the player based on if 'w' is pressed or not
-move :: Player -> Player
-move player | thrust (playerInput player) = player {playerMovement = 
+move :: Float -> Player -> Player
+move dt player  | thrust (playerInput player) = player {playerMovement = 
                                                             (playerMovement player)
-                                                                {velocity = degToVec (rotation (playerMovement player))
-                                                                ,position = (position (playerMovement player)) `add` (degToVec (rotation (playerMovement player)))}
-                                                    }
-            | otherwise = player    {playerMovement = 
+                                                                {velocity = newVel , position = newPos}}
+                | otherwise = player {playerMovement = 
                                         (playerMovement player)
-                                            {velocity = (0,0)}
-                                    }
+                                            {position = newPos}}
+                where
+                    vel = velocity (playerMovement player)
+                    pos = position (playerMovement player)
+                    angle = rotation (playerMovement player)
+                    newVel = limitVelocity (vel `add` ((dt*100) `scale` (degToVec angle)))
+                    newPos = pos `add` (dt `scale` vel)
+        
 

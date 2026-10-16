@@ -9,6 +9,10 @@ add (x0,y0) (x1,y1) = (x0+x1,y0+y1)
 scale :: Float -> Point -> Point
 scale t (x0,y0) = (t*x0, t*y0)
 
+len :: Point -> Float
+len (x,y) = sqrt (x*x + y*y)
+
+
 data Input  = Input { turnLeft  :: Bool 
                     , turnRight  :: Bool
                     , thrust     :: Bool
