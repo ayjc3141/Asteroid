@@ -6,7 +6,7 @@ import Input
 import PlayerMoves
 import Graphics.Gloss.Data.Point
 main :: IO ()
-main = playIO  
+main = playIO  --Uses Player as gamestate for now, will switch to GameState later
                 (InWindow "Asteroid" (800,800) (100,100)) 
                 (makeColor 0 0 0 1)
                 60
